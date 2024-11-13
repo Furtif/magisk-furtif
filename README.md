@@ -4,20 +4,27 @@
 
 Runs apk-tools on boot with magisk. 
 
-For more information on frida, see https://www.frida.re/docs/android/.
-
 ## Instructions
 
-Flash the zip for your platform using TWRP or Magisk Manager.
+1. edit the config file (magisk-furtif.json)
+ - Device Name
+ - Discord Webhook URL
+ - edit tab cords (In the example config the values ​​of a TX9s are stored)
 
-You can either grab the zip file from the [release page](https://github.com/Furtif/magisk-furtif/releases) or build it yourself.
+2. push config file (magisk-furtif.json) to /sdcard/Download
 
-In order to build it:
+   ```adb push magisk-furtif.json /sdcard/Download```
 
-```
-git clone https://github.com/Furtif/magisk-furtif
-cd magisk-furtif
-python3 build.py
-```
+4. Flash the zip for your platform using TWRP or Magisk Manager.
 
-Zip fils will be generated in builds.
+## example configuration
+
+H96max V11(Android 11) RK3318
+
+    "start_coordinates": {
+        "tap1": { "x": 945, "y": 665, "sleep": 10 },
+        "swipe": { "x1": 1340, "y1": 890, "x2": 1340, "y2": 295, "duration": 300, "sleep": 35 },
+        "tap2": { "x": 1295, "y": 970, "sleep": 20 },
+        "tap3": { "x": 945, "y": 325, "sleep": 10 },
+        "tap4": { "x": 945, "y": 570, "sleep": 15 }
+    }

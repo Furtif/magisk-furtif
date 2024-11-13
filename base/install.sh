@@ -136,6 +136,13 @@ on_install() {
   # Extend/change the logic to whatever you want
   ui_print "- Extracting module files"
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
+      if [ -d /system/xbin ]; then
+        BIN=/system/xbin
+        mv $MODPATH/system/bin "$MODPATH$BIN"
+    else
+        BIN=/system/bin
+    fi
+    ui_print "- Setting BIN: $BIN."
 }
 
 # Only some special files require specific permissions
@@ -145,6 +152,17 @@ on_install() {
 set_permissions() {
   # The following is the default rule, DO NOT remove
   set_perm_recursive $MODPATH 0 0 0755 0644
+  
+  set_perm $MODPATH/$BIN/bash 0 2000 0755 u:object_r:system_file:s0
+  set_perm $MODPATH/$BIN/curl 0 2000 0755 u:object_r:system_file:s0
+  set_perm $MODPATH/$BIN/eventrec 0 2000 0755 u:object_r:system_file:s0
+  set_perm $MODPATH/$BIN/jq 0 2000 0755 u:object_r:system_file:s0
+  set_perm $MODPATH/$BIN/strace 0 2000 0755 u:object_r:system_file:s0
+  set_perm $MODPATH/$BIN/tcpdump 0 2000 0755 u:object_r:system_file:s0
+  set_perm $MODPATH/$BIN/nano 0 2000 0755 u:object_r:system_file:s0
+  set_perm $MODPATH/$BIN/nano.bin 0 2000 0755 u:object_r:system_file:s0
+  set_perm $MODPATH/$BIN/sqlite3 0 2000 0755 u:object_r:system_file:s0
+  set_perm $MODPATH/$BIN/wgetty 0 2000 0755 u:object_r:system_file:s0
 }
 
 # You can add more functions to assist your custom script code
