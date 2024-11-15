@@ -103,7 +103,7 @@ check_network_connection() {
 close_apps() {
     am force-stop com.github.furtif.furtifformaps
     am force-stop com.nianticlabs.pokemongo
-    send_discord_message "🔴 $DEVICE_NAME: FurtifForMaps and Pokémon GO were closed."
+    send_discord_message "🔴 $DEVICE_NAME: --=FurtiF™=-- Tools and Pokémon GO were closed."
     sleep 5
 }
 
@@ -120,7 +120,7 @@ start_apk_tools() {
     input tap "$TAP3_X" "$TAP3_Y"
     sleep "$TAP4_SLEEP"
     input tap "$TAP4_X" "$TAP4_Y"
-    send_discord_message "🟢 $DEVICE_NAME: FurtifForMaps started and actions performed."
+    send_discord_message "🟢 $DEVICE_NAME: --=FurtiF™=-- Tools started and actions performed."
 }
 
 # Initial start of APK tools
