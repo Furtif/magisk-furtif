@@ -28,7 +28,7 @@ versionCode={1}
 author=Furtif
 description=Runs Apk-Tools on boot with magisk.
 support=https://github.com/Furtif/magisk-furtif/issues
-updateJson=https://raw.githubusercontent.com/Furtif/magisk-furtif/refs/heads/main/updater.json
+updateJson=https://raw.githubusercontent.com/Furtif/magisk-furtif/refs/heads/atv/updater.json
 minMagisk=1530""".format(frida_release, frida_release.replace(".", ""))
 
     with open(os.path.join(path, "module.prop"), "w", newline='\n') as f:
@@ -38,7 +38,7 @@ minMagisk=1530""".format(frida_release, frida_release.replace(".", ""))
 def create_module(frida_release):
     # Create directory.
     module_dir = os.path.join(PATH_BUILDS)
-    module_zip = os.path.join(PATH_BUILDS, "MagiskFurtif-{0}.zip".format(frida_release))
+    module_zip = os.path.join(PATH_BUILDS, "MagiskFurtif-atv-{0}.zip".format(frida_release))
 
     if os.path.exists(module_dir):
         shutil.rmtree(module_dir)
