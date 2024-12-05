@@ -33,19 +33,22 @@ minMagisk=1530""".format(frida_release, frida_release.replace(".", ""))
 
 def create_module(frida_release):
     # Create directory.
-    module_dir = os.path.join(PATH_BUILDS)
-    module_zip = os.path.join(PATH_BUILDS, "MagiskFurtif-{0}.zip".format(frida_release))
+    module_dir = os.path.join(PATH_BUILDS, "module_temp")
+    module_zip = os.path.join(PATH_BUILDS, f"MagiskFurtif-{frida_release}.zip")
 
+    # Ensure clean slate.
     if os.path.exists(module_dir):
+        print(f"Removing existing temporary directory: {module_dir}")
         shutil.rmtree(module_dir)
 
     if os.path.exists(module_zip):
+        print(f"Removing existing zip file: {module_zip}")
         os.remove(module_zip)
 
     # Copy base module into module dir.
     shutil.copytree(PATH_BASE_MODULE, module_dir)
 
-    # cd into module directory.
+    # Temporarily change to module directory to gather files.
     os.chdir(module_dir)
 
     # Create module.prop.
@@ -60,13 +63,21 @@ def create_module(frida_release):
     traverse_path_to_list(file_list, "./system")
     traverse_path_to_list(file_list, "./META-INF")
 
-    with zipfile.ZipFile(module_zip, "w") as zf:
+    with zipfile.ZipFile(module_zip, "w", zipfile.ZIP_DEFLATED) as zf:
         for file_name in file_list:
             path = os.path.join(module_dir, file_name)
             if not os.path.exists(path):
-                print("File {0} does not exist..".format(path))
+                print(f"File {path} does not exist.")
                 continue
             zf.write(path, arcname=file_name)
+
+    # Change back to the base directory before cleaning up.
+    os.chdir(PATH_BASE)
+
+    # Clean up intermediate directory.
+    print(f"Cleaning up temporary directory: {module_dir}")
+    shutil.rmtree(module_dir)
+
 
 
 def main():
@@ -76,13 +87,14 @@ def main():
 
     # Fetch frida information.
     frida_release = "1.8"
+    frida_release = "1.8"
 
-    print("MagiskFurtif version is {0}.".format(frida_release))
+    print(f"MagiskFurtif version is {frida_release}.")
         
     # Create flashable modules.
     create_module(frida_release)
 
-    print("Done.")
+    print("Done. Only zip file remains in builds directory.")
 
 
 if __name__ == "__main__":
