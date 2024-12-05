@@ -1,0 +1,40 @@
+# General settings
+BINDIR="/data/data/com.termux/files/usr/bin"
+DEVICENAME="YourDeviceNameHere" # Replace with your device name
+USEDISCORD=true # Set to true to enable Discord notifications
+DISCORD_WEBHOOK_URL="" # Add your Discord webhook URL here
+MESSAGE_ID="" # Optional: Add a message ID for updates (if required)
+
+# Rotom API settings
+ROTOMAPI_URL="" # Add your Rotom API URL here
+USEROTOM=true # Set to true to enable Rotom API checks
+ROTOMAPI_USE_AUTH=false # Set to true if Rotom API requires authentication
+
+# APK Tools settings
+APK_MAIN_ACTIVITY="com.github.furtif.furtifformaps/com.github.furtif.furtifformaps.MainActivity"
+APK_PACKAGE_NAME="com.github.furtif.furtifformaps"
+POGO_PACKAGE_NAME="com.nianticlabs.pokemongo"
+
+# UI interaction (coordinates for taps and swipes)
+LOGIN_TAP_X=389
+LOGIN_TAP_Y=696
+SWIPE_START_X=1303
+SWIPE_START_Y=771
+SWIPE_END_X=1300
+SWIPE_END_Y=375
+AUTHORIZE_TAP_X=1260
+AUTHORIZE_TAP_Y=878
+SERVICE_RECHECK_TAP_X=562
+SERVICE_RECHECK_TAP_Y=380
+SERVICE_START_TAP_X=822
+SERVICE_START_TAP_Y=535
+
+# Delays (in seconds)
+BOOT_DELAY=20 # Delay to allow the device to fully boot
+APP_LOAD_DELAY=20 # Delay to allow the app to load
+LOGIN_DELAY=20 # Delay for login process
+SWIPE_DELAY=3 # Delay for swipe action
+AUTHORIZE_DELAY=10 # Delay for authorization process
+SERVICE_CHECK_DELAY=1 # Delay after rechecking the service
+SERVICE_START_DELAY=1 # Delay after starting the service
+LOOP_INTERVAL=300 # Interval between health checks or monitoring loops
