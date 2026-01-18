@@ -1,0 +1,9 @@
+# This file will be read by resetprop
+# Example: Change dpi
+# ro.sf.lcd_density=320
+
+# OpenGLES version
+#196608 is decimal for 0x30000 to report major/minor versions as 3/0
+#196609 is decimal for 0x30001 to report major/minor versions as 3/1
+#196610 is decimal for 0x30002 to report major/minor versions as 3/2
+#ro.opengles.version=196608
