@@ -195,7 +195,7 @@ send_discord_message() {
         # Default messages - purple
         selected_color=10496692
         # Dynamic color selection based on message content (before JSON processing)
-        if echo "$1" | grep -qiE "recovery|restart|waiting"; then
+        if echo "$1" | grep -qiE "recovery|restart|waiting|alert"; then
             # Warning/recovery messages - orange
             selected_color=16776960
         elif echo "$1" | grep -qiE "started|success|ready"; then
