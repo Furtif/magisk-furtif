@@ -54,12 +54,12 @@ nano base/common/service.sh
 
 | Variable | Description | Default Value |
 |----------|-------------|---------------|
-| `DEVICENAME` | Device identifier for notifications | `"Pixel5"` |
+| `DEVICE_NAME` | Device identifier for notifications | `"Pixel5"` |
 | `BINDIR` | Termux binary directory path | `"/data/data/com.termux/files/usr/bin"` |
 | `DISCORD_WEBHOOK_URL` | Discord webhook for notifications | `"YOUR_WEBHOOK_URL_HERE"` |
-| `USEDISCORD` | Enable/disable Discord notifications | `false` |
+| `USE_DISCORD` | Enable/disable Discord notifications | `false` |
 | `ROTOMAPI_URL` | Rotom API endpoint for status checks | `"YOUR_ROTOM_URL_HERE"` |
-| `USEROTOM` | Enable/disable Rotom API integration | `false` |
+| `USE_ROTOM` | Enable/disable Rotom API integration | `false` |
 | `ROTOMAPI_USER` | Rotom API username (if auth required) | `"YOUR_USERNAME_HERE"` |
 | `ROTOMAPI_PASSWORD` | Rotom API password (if auth required) | `"YOUR_PASSWORD_HERE"` |
 | `ROTOMAPI_USE_AUTH` | Enable/disable Rotom API authentication | `false` |
@@ -80,7 +80,7 @@ Choose the correct path based on your Android version and device type:
 1. Create a Discord server and channel
 2. Go to Server Settings → Integrations → Webhooks
 3. Create a new webhook and copy the URL
-4. Set `USEDISCORD=true` and update `DISCORD_WEBHOOK_URL`
+4. Set `USE_DISCORD=true` and update `DISCORD_WEBHOOK_URL`
 
 ### Termux Dependencies
 
@@ -128,11 +128,6 @@ When applications are detected as offline:
 3. **Restart**: FurtiF™ Tools is automatically restarted
 4. **Verification**: System waits and verifies successful startup
 
-## 📱 Supported Applications
-
-- **FurtiF™ Tools**: `com.github.furtif.furtifformaps`
-- **You_APP**: `xxx.xxxxx.yyyy`
-
 ## 🔧 Advanced Configuration
 
 ### Custom Timing Parameters
@@ -179,7 +174,7 @@ Uncomment and configure optional features:
 
 #### Discord Notifications Not Working
 - Verify webhook URL is correct and accessible
-- Check `USEDISCORD=true` in configuration
+- Check `USE_DISCORD=true` in configuration
 - Test webhook manually: `curl -X POST -H "Content-Type: application/json" -d '{"content":"test"}' YOUR_WEBHOOK_URL`
 - Ensure Discord channel has webhook permissions
 

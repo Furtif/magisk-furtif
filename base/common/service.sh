@@ -38,7 +38,7 @@ LOADER_TIME=40
 
 # Device identification
 # Used for logging, notifications, and API communications
-DEVICENAME="Pixel5"
+DEVICE_NAME="Pixel5"
 
 # Set the package name of the application to monitor
 PACKAGE_NAME="xxx.xxxxxxx.xxxxx"
@@ -50,7 +50,7 @@ DISCORD_WEBHOOK_URL="YOUR_WEBHOOK_URL_HERE"
 
 # Discord notification toggle
 # Set to 'true' to enable Discord notifications, 'false' to disable
-USEDISCORD=false
+USE_DISCORD=false
 
 # Rotom API configuration
 # Replace "YOUR_ROTOM_URL_HERE" with your Rotom API endpoint
@@ -59,7 +59,7 @@ ROTOMAPI_URL="YOUR_ROTOM_URL_HERE/api/status"
 
 # Rotom API toggle
 # Set to 'true' to enable Rotom API status checks, 'false' to disable
-USEROTOM=false
+USE_ROTOM=false
 
 # Rotom API authentication credentials
 # Only required if your Rotom API uses authentication
@@ -111,7 +111,7 @@ sleep 5
 # Queries the Rotom API to retrieve device health information and memory status
 rotom_device_status() {
     # Only execute if Rotom API integration is enabled
-    if [ "$USEROTOM" = true ]; then
+    if [ "$USE_ROTOM" = true ]; then
         # Fetch API response with or without authentication based on configuration
         if [ "$ROTOMAPI_USE_AUTH" = true ]; then
             response=$("$BINDIR"/curl -s -u "$ROTOMAPI_USER:$ROTOMAPI_PASSWORD" "$ROTOMAPI_URL")
@@ -119,14 +119,14 @@ rotom_device_status() {
             response=$("$BINDIR"/curl -s "$ROTOMAPI_URL")
         fi
         # Extract device information matching our device name from API response
-        device_info=$(echo "$response" | "$BINDIR"/jq -r --arg name "$DEVICENAME" '.devices[] | select((.origin | split(" • ")[1]) == $name)')
+        device_info=$(echo "$response" | "$BINDIR"/jq -r --arg name "$DEVICE_NAME" '.devices[] | select((.origin | split(" • ")[1]) == $name)')
         # Get the actual device ID from the device info
         device_id=$(echo "$device_info" | "$BINDIR"/jq -r '.deviceId')
         # Count workers for this device from the workers array using the actual device ID
         worker_count=$(echo "$response" | "$BINDIR"/jq -r --arg device_id "$device_id" '.workers[] | select(.deviceId == $device_id) | .deviceId' | wc -l || echo "0")
         # Validate device information - send alert if not found or null
         if [ -z "$device_info" ] || [ "$device_info" == "null" ]; then
-            message="❌ **API Error: $DEVICENAME**\n\n"
+            message="❌ **API Error: $DEVICE_NAME**\n\n"
             message="${message}🔍 **Issue:** Device not found in Rotom API\n"
             message="${message}🔧 **Action:** Restarting applications..."
             send_discord_message "$message"
@@ -143,7 +143,7 @@ rotom_device_status() {
         mem_free_mb=$((mem_free_kb / 1024))
         # Send status update if device is online and healthy
         if [ "$is_alive" = "true" ]; then
-            message="📱 **Device Status: $DEVICENAME**\n\n"
+            message="📱 **Device Status: $DEVICE_NAME**\n\n"
             message="${message}🟢 **IsAlive:** $is_alive\n"
             message="${message}💾 **Free Memory:** ${mem_free_mb} MB\n"
             message="${message}👥 **Workers:** $worker_count"
@@ -152,7 +152,7 @@ rotom_device_status() {
         
         # Handle device offline status or low memory conditions (< 200MB)
         if [ "$is_alive" = "false" ] || [ "$mem_free_kb" -lt 204800 ]; then
-            message="🚨 **Device Alert: $DEVICENAME**\n\n"
+            message="🚨 **Device Alert: $DEVICE_NAME**\n\n"
             if [ "$is_alive" = "false" ]; then
                 message="${message}🔴 **Status:** Offline\n"
             fi
@@ -173,7 +173,7 @@ rotom_device_status() {
 # Sends formatted messages to Discord channel via webhook URL
 send_discord_message() {
     # Only send if Discord notifications are enabled
-    if [ "$USEDISCORD" = true ]; then
+    if [ "$USE_DISCORD" = true ]; then
         # Dynamic color selection based on message content (before JSON processing)
         if echo "$1" | grep -q "❌\|🚨\|🔴\|Error\|error\|Offline\|offline"; then
             # Error/critical messages - red
@@ -226,7 +226,7 @@ close_apps_if_offline_and_start_it() {
     am force-stop com.github.furtif.furtifformaps
     am force-stop "$PACKAGE_NAME"
     # Notify about the recovery action
-    message="🔄 **Device Recovery: $DEVICENAME**\n\n"
+    message="🔄 **Device Recovery: $DEVICE_NAME**\n\n"
     message="${message}📱 **Action:** Force-stopping applications\n"
     message="${message}⏳ **Status:** Waiting before restart..."
     send_discord_message "$message"
@@ -242,7 +242,7 @@ start_apk_tools() {
     # Launch FurtiF™ Tools main activity
     am start -n com.github.furtif.furtifformaps/com.github.furtif.furtifformaps.MainActivity
     # Send confirmation that tools have been started
-    message="✅ **Device Started: $DEVICENAME**\n\n"
+    message="✅ **Device Started: $DEVICE_NAME**\n\n"
     message="${message}🚀 **Application:** FurtiF™ Tools launched\n"
     message="${message}⏱️ **Wait:** $LOADER_TIME seconds for initialization\n"
     message="${message}✨ **Status:** Ready for operation"
