@@ -194,6 +194,10 @@ send_discord_message() {
         # Default messages - purple
         selected_color=10496692
         # Dynamic color selection based on message content (before JSON processing)
+        if echo "$1" | grep -q "📱\|🟢\|Status"; then
+            # Status messages - blue
+            selected_color=255
+        fi
         if echo "$1" | grep -q "❌\|🚨\|🔴\|Error\|error\|Offline\|offline"; then
             # Error/critical messages - red
             selected_color=16711680
@@ -205,10 +209,6 @@ send_discord_message() {
         if echo "$1" | grep -q "🔄\|⏳\|Recovery\|🔧"; then
             # Warning/recovery messages - orange
             selected_color=16776960
-        fi
-        if echo "$1" | grep -q "📱\|🟢\|Status"; then
-            # Status messages - blue
-            selected_color=255
         fi
         # Escape special characters for JSON compatibility
         message=$(echo "$1" | sed 's/"/\\"/g' | sed 's/$/\\n/' | tr -d '\n')
