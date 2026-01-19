@@ -54,7 +54,6 @@ nano base/common/service.sh
 
 | Variable | Description | Default Value |
 |----------|-------------|---------------|
-| `DEVICE_NAME` | Device identifier for notifications | `"Pixel5"` |
 | `BINDIR` | Termux binary directory path | `"/data/data/com.termux/files/usr/bin"` |
 | `DISCORD_WEBHOOK_URL` | Discord webhook for notifications | `"YOUR_WEBHOOK_URL_HERE"` |
 | `USE_DISCORD` | Enable/disable Discord notifications | `false` |
@@ -63,7 +62,6 @@ nano base/common/service.sh
 | `ROTOMAPI_USER` | Rotom API username (if auth required) | `"YOUR_USERNAME_HERE"` |
 | `ROTOMAPI_PASSWORD` | Rotom API password (if auth required) | `"YOUR_PASSWORD_HERE"` |
 | `ROTOMAPI_USE_AUTH` | Enable/disable Rotom API authentication | `false` |
-| `PACKAGE_NAME` | Package name to monitor | `"com.xxxx.xxxx.yyy"` |
 | `LOADER_TIME` | Application startup wait time in seconds | `40` |
 
 ### Termux Binary Directory Paths

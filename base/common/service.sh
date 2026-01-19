@@ -36,13 +36,6 @@ BINDIR="/data/data/com.termux/files/usr/bin"
 # Adjust this duration based on your device performance
 LOADER_TIME=40
 
-# Device identification
-# Used for logging, notifications, and API communications
-DEVICE_NAME="Pixel5"
-
-# Set the package name of the application to monitor
-PACKAGE_NAME="xxx.xxxxxxx.xxxxx"
-
 # Discord webhook configuration
 # Replace "YOUR_WEBHOOK_URL_HERE" with your actual Discord webhook URL
 # to send status messages and alerts to your Discord channel
@@ -74,6 +67,13 @@ ROTOMAPI_USE_AUTH=false
 # This script runs in late_start service mode, ensuring execution after
 # most system services have started.
 
+# Device identification
+# Used for logging, notifications, and API communications
+DEVICE_NAME="Pixel5"
+
+# Set the package name of the application to monitor
+PACKAGE_NAME="xxx.xxxxxxx.xxxxx"
+
 # Wait for system boot completion by monitoring sys.boot_completed property
 # The property will be "1" once the boot process is fully completed
 until [ "$(getprop sys.boot_completed)" = "1" ]; do
@@ -82,6 +82,22 @@ done
 
 # Additional delay to ensure system stability after boot completion
 sleep 5
+
+get_device_name() {
+    su -c "cat /data/data/com.github.furtif.furtifformaps/files/config.json" | "$BINDIR"/jq -r ".RotomDeviceName"
+}
+
+get_package_name() {
+    su -c "cat /data/data/com.github.furtif.furtifformaps/files/config.json" | "$BINDIR"/jq -r ".PackageName"
+}
+
+get_is_rotom_mode() {
+    su -c "cat /data/data/com.github.furtif.furtifformaps/files/config.json" | "$BINDIR"/jq -r ".IsRotomMode"
+}
+
+get_try_auto_start() {
+    su -c "cat /data/data/com.github.furtif.furtifformaps/files/config.json" | "$BINDIR"/jq -r ".RotomTryAutoStart"
+}
 
 # ============================================================================
 # OPTIONAL SYSTEM CONFIGURATIONS
@@ -260,6 +276,21 @@ sleep 15
 # Continuous monitoring loop
 # Checks device status every 5 minutes and performs recovery actions as needed
 while true; do
+    DEVICE_NAME=$(get_device_name)
+    PACKAGE_NAME=$(get_package_name)
+    IS_ROTOM=$(get_is_rotom_mode)
+    AUTO_START=$(get_try_auto_start)
+    
+    # Pass if is not rotom mode or if auto start is not enabled
+    if [ "$IS_ROTOM" = "false" ]; then
+        sleep 300
+        continue
+    fi
+    if [ "$AUTO_START" = "false" ]; then
+        sleep 300
+        continue
+    fi
+    
     # If device is offline (missing processes), execute recovery procedure
     if ! check_device_status; then
         close_apps_if_offline_and_start_it
