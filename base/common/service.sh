@@ -189,29 +189,25 @@ rotom_device_status() {
 # Sends formatted messages to Discord channel via webhook URL
 send_discord_message() {
     # Only send if Discord notifications are enabled
-    if [ "$USE_DISCORD" = true ]; then
-        
+    if [ "$USE_DISCORD" = true ]; then     
+        # Escape special characters for JSON compatibility
+        message=$(echo "$1" | sed 's/"/\\"/g' | sed 's/$/\\n/' | tr -d '\n')
         # Default messages - purple
         selected_color=10496692
         # Dynamic color selection based on message content (before JSON processing)
-        if echo "$1" | grep -q "📱\|🟢\|Status"; then
+        if echo "$1" | grep -qiE "recovery|restart|waiting"; then
+            # Warning/recovery messages - orange
+            selected_color=16776960
+        elif echo "$1" | grep -qiE "started|success|ready"; then
+            # Success messages - green
+            selected_color=5814783
+        elif echo "$1" | grep -qiE "error|offline"; then
+            # Error/critical messages - red
+            selected_color=16711680
+        elif echo "$1" | grep -qiE "status|online|alive"; then
             # Status messages - blue
             selected_color=255
         fi
-        if echo "$1" | grep -q "❌\|🚨\|🔴\|Error\|error\|Offline\|offline"; then
-            # Error/critical messages - red
-            selected_color=16711680
-        fi
-        if echo "$1" | grep -q "✅\|🚀\|Started\|✨"; then
-            # Success messages - green
-            selected_color=5814783
-        fi
-        if echo "$1" | grep -q "🔄\|⏳\|Recovery\|🔧"; then
-            # Warning/recovery messages - orange
-            selected_color=16776960
-        fi
-        # Escape special characters for JSON compatibility
-        message=$(echo "$1" | sed 's/"/\\"/g' | sed 's/$/\\n/' | tr -d '\n')
         # Create optimized JSON payload with Discord embed formatting
         timestamp=$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)
         payload="{\"content\": null, \"embeds\": [{\"title\": \"FurtiF Tools Monitor\", \"description\": \"$message\", \"color\": $selected_color, \"timestamp\": \"$timestamp\"}]}"
