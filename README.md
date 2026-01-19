@@ -229,7 +229,7 @@ magisk-furtif/
 │   ├── common/
 │   │   ├── service.sh             # Main service script
 │   │   ├── post-fs-data.sh        # Post-filesystem script
-│   │   └── system.prop             # System properties
+│   │   └── system.prop            # System properties
 │   └── install.sh                 # Installation script
 ├── .github/workflows/             # CI/CD configuration
 ├── builds/                        # Built module outputs
