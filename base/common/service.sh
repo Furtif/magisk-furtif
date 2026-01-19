@@ -190,22 +190,25 @@ rotom_device_status() {
 send_discord_message() {
     # Only send if Discord notifications are enabled
     if [ "$USE_DISCORD" = true ]; then
+        
+        # Default messages - purple
+        selected_color=10496692
         # Dynamic color selection based on message content (before JSON processing)
         if echo "$1" | grep -q "❌\|🚨\|🔴\|Error\|error\|Offline\|offline"; then
             # Error/critical messages - red
             selected_color=16711680
-            elif echo "$1" | grep -q "✅\|🚀\|Started\|✨"; then
+        fi
+        if echo "$1" | grep -q "✅\|🚀\|Started\|✨"; then
             # Success messages - green
             selected_color=5814783
-            elif echo "$1" | grep -q "🔄\|⏳\|Recovery\|🔧"; then
+        fi
+        if echo "$1" | grep -q "🔄\|⏳\|Recovery\|🔧"; then
             # Warning/recovery messages - orange
             selected_color=16776960
-            elif echo "$1" | grep -q "📱\|🟢\|Status"; then
+        fi
+        if echo "$1" | grep -q "📱\|🟢\|Status"; then
             # Status messages - blue
             selected_color=255
-        else
-            # Default messages - purple
-            selected_color=10496692
         fi
         # Escape special characters for JSON compatibility
         message=$(echo "$1" | sed 's/"/\\"/g' | sed 's/$/\\n/' | tr -d '\n')
