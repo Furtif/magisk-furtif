@@ -41,10 +41,7 @@ LOADER_TIME=40
 DEVICENAME="Pixel5"
 
 # Set the package name of the application to monitor
-# Example: PACKAGE_NAME="com.nianticlabs.pokemongo" for Pokémon Google
-#or
-# Example: PACKAGE_NAME="com.nianticlabs.pokemongo.ares" for Pokémon Samsung
-PACKAGE_NAME="com.nianticlabs.pokemongo"
+PACKAGE_NAME="xxx.xxxxxxx.xxxxx"
 
 # Discord webhook configuration
 # Replace "YOUR_WEBHOOK_URL_HERE" with your actual Discord webhook URL
@@ -121,16 +118,12 @@ rotom_device_status() {
         else
             response=$("$BINDIR"/curl -s "$ROTOMAPI_URL")
         fi
-        
         # Extract device information matching our device name from API response
         device_info=$(echo "$response" | "$BINDIR"/jq -r --arg name "$DEVICENAME" '.devices[] | select((.origin | split(" • ")[1]) == $name)')
-        
         # Get the actual device ID from the device info
         device_id=$(echo "$device_info" | "$BINDIR"/jq -r '.deviceId')
-        
         # Count workers for this device from the workers array using the actual device ID
         worker_count=$(echo "$response" | "$BINDIR"/jq -r --arg device_id "$device_id" '.workers[] | select(.deviceId == $device_id) | .deviceId' | wc -l || echo "0")
-        
         # Validate device information - send alert if not found or null
         if [ -z "$device_info" ] || [ "$device_info" == "null" ]; then
             message="❌ **API Error: $DEVICENAME**\n\n"
@@ -143,14 +136,11 @@ rotom_device_status() {
             sleep 5
             return
         fi
-        
         # Extract device status and memory information from API response
         is_alive=$(echo "$device_info" | "$BINDIR"/jq -r '.isAlive')
         mem_free_kb=$(echo "$device_info" | "$BINDIR"/jq -r '.lastMemory.memFree')
-        
         # Convert memory from KB to MB
         mem_free_mb=$((mem_free_kb / 1024))
-        
         # Send status update if device is online and healthy
         if [ "$is_alive" = "true" ]; then
             message="📱 **Device Status: $DEVICENAME**\n\n"
@@ -188,23 +178,21 @@ send_discord_message() {
         if echo "$1" | grep -q "❌\|🚨\|🔴\|Error\|error\|Offline\|offline"; then
             # Error/critical messages - red
             selected_color=16711680
-        elif echo "$1" | grep -q "✅\|🚀\|Started\|✨"; then
+            elif echo "$1" | grep -q "✅\|🚀\|Started\|✨"; then
             # Success messages - green
             selected_color=5814783
-        elif echo "$1" | grep -q "🔄\|⏳\|Recovery\|🔧"; then
+            elif echo "$1" | grep -q "🔄\|⏳\|Recovery\|🔧"; then
             # Warning/recovery messages - orange
             selected_color=16776960
-        elif echo "$1" | grep -q "📱\|🟢\|Status"; then
+            elif echo "$1" | grep -q "📱\|🟢\|Status"; then
             # Status messages - blue
             selected_color=255
         else
             # Default messages - purple
             selected_color=10496692
         fi
-        
         # Escape special characters for JSON compatibility
         message=$(echo "$1" | sed 's/"/\\"/g' | sed 's/$/\\n/' | tr -d '\n')
-        
         # Create optimized JSON payload with Discord embed formatting
         timestamp=$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)
         payload="{\"content\": null, \"embeds\": [{\"title\": \"FurtiF Tools Monitor\", \"description\": \"$message\", \"color\": $selected_color, \"timestamp\": \"$timestamp\"}]}"
@@ -219,14 +207,13 @@ send_discord_message() {
 }
 
 # Check if target applications are running
-# Monitors Pokémon GO and FurtiF™ Tools process status
+# Monitors FurtiF™ Tools process status
 check_device_status() {
     # Get process IDs for target applications
-    PidPOGO=$(pidof "$PACKAGE_NAME")
+    PidAPP=$(pidof "$PACKAGE_NAME")
     PidAPK=$(pidof com.github.furtif.furtifformaps)
-    
     # Device is considered offline if either process is not running
-    if [[ -z "$PidPOGO" || -z "$PidAPK" ]]; then
+    if [[ -z "$PidAPP" || -z "$PidAPK" ]]; then
         return 1
     fi
     return 0
@@ -238,16 +225,13 @@ close_apps_if_offline_and_start_it() {
     # Force-stop target applications to clear any issues
     am force-stop com.github.furtif.furtifformaps
     am force-stop "$PACKAGE_NAME"
-    
     # Notify about the recovery action
     message="🔄 **Device Recovery: $DEVICENAME**\n\n"
     message="${message}📱 **Action:** Force-stopping applications\n"
     message="${message}⏳ **Status:** Waiting before restart..."
     send_discord_message "$message"
-    
     # Wait before restarting to ensure clean shutdown
     sleep 5
-    
     # Restart the FurtiF™ Tools application
     start_apk_tools
 }
@@ -257,15 +241,13 @@ close_apps_if_offline_and_start_it() {
 start_apk_tools() {
     # Launch FurtiF™ Tools main activity
     am start -n com.github.furtif.furtifformaps/com.github.furtif.furtifformaps.MainActivity
-    
-    sleep "${LOADER_TIME}"
-    
     # Send confirmation that tools have been started
     message="✅ **Device Started: $DEVICENAME**\n\n"
     message="${message}🚀 **Application:** FurtiF™ Tools launched\n"
-    message="${message}⏱️ **Wait:** 60 seconds for initialization\n"
+    message="${message}⏱️ **Wait:** $LOADER_TIME seconds for initialization\n"
     message="${message}✨ **Status:** Ready for operation"
     send_discord_message "$message"
+    sleep "${LOADER_TIME}"
 }
 
 # ============================================================================
@@ -284,10 +266,8 @@ while true; do
         sleep 5
         continue
     fi
-    
     # Normal operation: wait 5 minutes before next status check
     sleep 300
-    
     # Perform Rotom API status check if enabled
     rotom_device_status
 done
