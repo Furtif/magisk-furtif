@@ -53,7 +53,7 @@ def traverse_path_to_list(file_list, path):
             file_list.append(os.path.join(dp, f))
 
 
-def create_module_prop(path, frida_release):
+def create_module_prop(path, release_version):
     """
     Create the module.prop file with module metadata.
 
@@ -63,8 +63,8 @@ def create_module_prop(path, frida_release):
     """
     module_prop = f"""id=magiskfurtif
 name=MagiskFurtif
-version=v{frida_release}
-versionCode={frida_release.replace('.', '')}
+version=v{release_version}
+versionCode={release_version.replace('.', '')}
 author=Furtif
 description=Runs FurtiF Tools on boot with magisk.
 support=https://github.com/Furtif/magisk-furtif/issues
@@ -73,21 +73,21 @@ minMagisk=1530"""
     prop_path = os.path.join(path, "module.prop")
     with open(prop_path, "w", newline='\n') as f:
         f.write(module_prop)
-    print(f"Created module.prop with version {frida_release}")
+    print(f"Created module.prop with version {release_version}")
 
 
-def create_module(frida_release):
+def create_module(release_version):
     """
     Create a complete Magisk module with the specified version.
 
     Args:
         frida_release (str): Version string for the module
     """
-    print(f"Creating MagiskFurtif module version {frida_release}...")
+    print(f"Creating MagiskFurtif module version {release_version}...")
 
     # Setup paths
     module_dir = PATH_BUILDS
-    module_zip = os.path.join(PATH_BUILDS, f"MagiskFurtif-{frida_release}.zip")
+    module_zip = os.path.join(PATH_BUILDS, f"MagiskFurtif-{release_version}.zip")
 
     # Clean up previous builds
     if os.path.exists(module_dir):
@@ -108,7 +108,7 @@ def create_module(frida_release):
 
     try:
         # Create module metadata
-        create_module_prop(module_dir, frida_release)
+        create_module_prop(module_dir, release_version)
 
         # Build the flashable zip
         print("Building flashable zip...")
@@ -174,7 +174,7 @@ def main():
     """
     # Parse command-line arguments
     args = parse_arguments()
-    frida_release = args.version
+    release_version = args.version
 
     print("=" * 50)
     print("MagiskFurtif Module Builder")
@@ -186,16 +186,16 @@ def main():
         print(f"Created builds directory: {PATH_BUILDS}")
 
     # Module version configuration
-    print(f"Building MagiskFurtif version {frida_release}...")
+    print(f"Building MagiskFurtif version {release_version}...")
 
     try:
         # Create the module
-        create_module(frida_release)
+        create_module(release_version)
 
         print("\n" + "=" * 50)
         print("Build completed successfully!")
         print(
-            f"Module location: {os.path.join(PATH_BUILDS, f'MagiskFurtif-{frida_release}.zip')}")
+            f"Module location: {os.path.join(PATH_BUILDS, f'MagiskFurtif-{release_version}.zip')}")
         print("=" * 50)
 
     except Exception as e:
