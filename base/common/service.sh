@@ -238,12 +238,12 @@ send_discord_message() {
         if echo "$1" | grep -qiE "recovery|restart|waiting"; then
             # Warning/recovery messages - orange (16776960)
             selected_color=16776960
-        elif echo "$1" | grep -qiE "started|success|ready"; then
-            # Success messages - green (5814783)
-            selected_color=5814783
         elif echo "$1" | grep -qiE "error|offline"; then
             # Error/critical messages - red (16711680)
             selected_color=16711680
+        elif echo "$1" | grep -qiE "started|success|ready"; then
+            # Success messages - green (5814783)
+            selected_color=5814783
         elif echo "$1" | grep -qiE "status|online|alive"; then
             # Status messages - blue (255)
             selected_color=255
