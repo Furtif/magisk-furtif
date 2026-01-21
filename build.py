@@ -72,7 +72,7 @@ def create_module_prop(path, release_version):
     
     Args:
         path (str): Directory path where to create the module.prop file
-        release_version (str): Version string for the module (e.g., "2.76")
+        release_version (str): Version string for the module (e.g., "x.xx")
         
     Returns:
         None: Creates the file on disk
@@ -108,7 +108,7 @@ def create_module(release_version):
     4. Builds the flashable zip file with proper structure
     
     Args:
-        release_version (str): Version string for the module (e.g., "2.76")
+        release_version (str): Version string for the module (e.g., "x.xx")
         
     Returns:
         None: Creates the module zip file in the builds/ directory
@@ -193,10 +193,10 @@ def parse_arguments():
         argparse.Namespace: Parsed command-line arguments
         
     Attributes:
-        version (str): Module version to build (default: "2.76")
+        version (str): Module version to build (default: "x.xx")
         
     Note:
-        The version should follow semantic versioning (e.g., "2.76", "3.0.0")
+        The version should follow semantic versioning (e.g., "x.xx", "x.x.x")
         and will be used in both the module.prop file and the output zip filename.
     """
     parser = argparse.ArgumentParser(
@@ -204,9 +204,9 @@ def parse_arguments():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-    python3 build.py                    # Use default version (2.76)
-    python3 build.py --version 2.76    # Build with specific version
-    python3 build.py -v 3.0.0          # Short form for version
+    python3 build.py                   # Use default version (1.00)
+    python3 build.py --version x.xx    # Build with specific version
+    python3 build.py -v x.x.x          # Short form for version
         """
     )
 
