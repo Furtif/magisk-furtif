@@ -356,17 +356,10 @@ while true; do
     IS_ROTOM=$(get_is_rotom_mode)
     AUTO_START=$(get_try_auto_start)
     
-    # Skip monitoring if Rotom mode is disabled
-    # This allows the service to remain dormant when not needed
-    if [ "$IS_ROTOM" = "false" ]; then
-        sleep 300
-        continue
-    fi
-    
-    # Skip monitoring if auto-start is disabled
-    # This provides fine-grained control over the recovery behavior
-    if [ "$AUTO_START" = "false" ]; then
-        sleep 300
+    # Skip monitoring if Rotom mode or auto-start is disabled
+    # This allows the service to remain dormant and provides fine-grained control over recovery behavior
+    if [ "$IS_ROTOM" = "false" ] || [ "$AUTO_START" = "false" ]; then
+        sleep 120
         continue
     fi
     
