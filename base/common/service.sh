@@ -67,11 +67,20 @@ ROTOMAPI_USE_AUTH=false
 # This script runs in late_start service mode, ensuring execution after
 # most system services have started.
 
-# Device identification
-# Used for logging, notifications, and API communications
-DEVICE_NAME="Pixel5"
+# Device identification (AUTO-CONFIGURED)
+# Automatically retrieved from FurtiF™ Tools configuration file
+# These placeholder values are overwritten during runtime
+# - Actual values come from get_device_name() function
+# - Reads 'RotomDeviceName' field from FurtiF™ Tools config.json
+# - Used for logging, notifications, and API communications
+DEVICE_NAME="xxxx"
 
-# Set the package name of the application to monitor
+# Package name (AUTO-CONFIGURED)
+# Automatically retrieved from FurtiF™ Tools configuration file
+# This placeholder value is overwritten during runtime
+# - Actual value comes from get_package_name() function
+# - Reads 'PackageName' field from FurtiF™ Tools config.json
+# - Used for process monitoring and lifecycle management
 PACKAGE_NAME="xxx.xxxxxxx.xxxxx"
 
 # Wait for system boot completion by monitoring sys.boot_completed property
