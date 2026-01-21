@@ -92,6 +92,9 @@ done
 # Additional delay to ensure system stability after boot completion
 sleep 5
 
+# FORCE Remove ART
+# pm uninstall com.google.android.art
+
 # ============================================================================
 # OPTIONAL SYSTEM CONFIGURATIONS
 # ============================================================================
