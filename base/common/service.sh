@@ -34,7 +34,7 @@ BINDIR="/data/data/com.termux/files/usr/bin"
 
 # Wait for application to fully load and initialize
 # Adjust this duration based on your device performance
-LOADER_TIME=40
+LOADER_TIME=60
 
 # Discord webhook configuration
 # Replace "YOUR_WEBHOOK_URL_HERE" with your actual Discord webhook URL

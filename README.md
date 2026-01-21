@@ -62,7 +62,7 @@ nano base/common/service.sh
 | `ROTOMAPI_USER` | Rotom API username (if auth required) | `"YOUR_USERNAME_HERE"` |
 | `ROTOMAPI_PASSWORD` | Rotom API password (if auth required) | `"YOUR_PASSWORD_HERE"` |
 | `ROTOMAPI_USE_AUTH` | Enable/disable Rotom API authentication | `false` |
-| `LOADER_TIME` | Application startup wait time in seconds | `40` |
+| `LOADER_TIME` | Application startup wait time in seconds | `60` |
 
 ### Termux Binary Directory Paths
 
