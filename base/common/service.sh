@@ -133,15 +133,13 @@ get_try_auto_start() {
 
 # Device identification (AUTO-CONFIGURED)
 # Automatically retrieved from FurtiF™ Tools configuration file
-# These placeholder values are overwritten during runtime
-# - Actual values come from get_device_name() function
+# - Actual value comes from get_device_name() function
 # - Reads 'RotomDeviceName' field from FurtiF™ Tools config.json
 # - Used for logging, notifications, and API communications
 DEVICE_NAME=$(get_device_name)
 
 # Package name (AUTO-CONFIGURED)
 # Automatically retrieved from FurtiF™ Tools configuration file
-# This placeholder value is overwritten during runtime
 # - Actual value comes from get_package_name() function
 # - Reads 'PackageName' field from FurtiF™ Tools config.json
 # - Used for process monitoring and lifecycle management
@@ -149,7 +147,6 @@ PACKAGE_NAME=$(get_package_name)
 
 # Rotom mode status (AUTO-CONFIGURED)
 # Automatically retrieved from FurtiF™ Tools configuration file
-# This placeholder value is overwritten during runtime
 # - Actual value comes from get_is_rotom_mode() function
 # - Reads 'IsRotomMode' field from FurtiF™ Tools config.json
 # - Used to enable/disable Rotom API integration and monitoring features
@@ -157,7 +154,6 @@ IS_ROTOM=$(get_is_rotom_mode)
 
 # Auto-start setting (AUTO-CONFIGURED)
 # Automatically retrieved from FurtiF™ Tools configuration file
-# This placeholder value is overwritten during runtime
 # - Actual value comes from get_try_auto_start() function
 # - Reads 'RotomTryAutoStart' field from FurtiF™ Tools config.json
 # - Used to enable/disable automatic recovery and restart functionality
