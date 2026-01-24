@@ -67,22 +67,6 @@ ROTOMAPI_USE_AUTH=false
 # This script runs in late_start service mode, ensuring execution after
 # most system services have started.
 
-# Device identification (AUTO-CONFIGURED)
-# Automatically retrieved from FurtiF™ Tools configuration file
-# These placeholder values are overwritten during runtime
-# - Actual values come from get_device_name() function
-# - Reads 'RotomDeviceName' field from FurtiF™ Tools config.json
-# - Used for logging, notifications, and API communications
-DEVICE_NAME="xxxx"
-
-# Package name (AUTO-CONFIGURED)
-# Automatically retrieved from FurtiF™ Tools configuration file
-# This placeholder value is overwritten during runtime
-# - Actual value comes from get_package_name() function
-# - Reads 'PackageName' field from FurtiF™ Tools config.json
-# - Used for process monitoring and lifecycle management
-PACKAGE_NAME="xxx.xxxxxxx.xxxxx"
-
 # Wait for system boot completion by monitoring sys.boot_completed property
 # The property will be "1" once the boot process is fully completed
 until [ "$(getprop sys.boot_completed)" = "1" ]; do
@@ -146,6 +130,38 @@ get_is_rotom_mode() {
 get_try_auto_start() {
     su -c "cat /data/data/com.github.furtif.furtifformaps/files/config.json" | "$BINDIR"/jq -r ".RotomTryAutoStart"
 }
+
+# Device identification (AUTO-CONFIGURED)
+# Automatically retrieved from FurtiF™ Tools configuration file
+# These placeholder values are overwritten during runtime
+# - Actual values come from get_device_name() function
+# - Reads 'RotomDeviceName' field from FurtiF™ Tools config.json
+# - Used for logging, notifications, and API communications
+DEVICE_NAME=$(get_device_name)
+
+# Package name (AUTO-CONFIGURED)
+# Automatically retrieved from FurtiF™ Tools configuration file
+# This placeholder value is overwritten during runtime
+# - Actual value comes from get_package_name() function
+# - Reads 'PackageName' field from FurtiF™ Tools config.json
+# - Used for process monitoring and lifecycle management
+PACKAGE_NAME=$(get_package_name)
+
+# Rotom mode status (AUTO-CONFIGURED)
+# Automatically retrieved from FurtiF™ Tools configuration file
+# This placeholder value is overwritten during runtime
+# - Actual value comes from get_is_rotom_mode() function
+# - Reads 'IsRotomMode' field from FurtiF™ Tools config.json
+# - Used to enable/disable Rotom API integration and monitoring features
+IS_ROTOM=$(get_is_rotom_mode)
+
+# Auto-start setting (AUTO-CONFIGURED)
+# Automatically retrieved from FurtiF™ Tools configuration file
+# This placeholder value is overwritten during runtime
+# - Actual value comes from get_try_auto_start() function
+# - Reads 'RotomTryAutoStart' field from FurtiF™ Tools config.json
+# - Used to enable/disable automatic recovery and restart functionality
+AUTO_START=$(get_try_auto_start)
 
 # Check device status via Rotom API
 # Queries the Rotom API to retrieve device health information and memory status
@@ -316,6 +332,9 @@ close_apps_if_offline_and_start_it() {
 # Parameters: None (uses global configuration variables)
 # Returns: None (sends notification and waits for initialization)
 start_apk_tools() {
+    if [ "$IS_ROTOM" = "false" ] || [ "$AUTO_START" = "false" ]; then
+        return
+    fi
     # Launch FurtiF™ Tools main activity using Android Activity Manager
     # This starts the main application interface
     am start -n com.github.furtif.furtifformaps/com.github.furtif.furtifformaps.MainActivity
