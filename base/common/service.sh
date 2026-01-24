@@ -332,6 +332,8 @@ close_apps_if_offline_and_start_it() {
 # Parameters: None (uses global configuration variables)
 # Returns: None (sends notification and waits for initialization)
 start_apk_tools() {
+    # Safety check: Only proceed if both Rotom mode and auto-start are enabled
+    # This prevents unnecessary application launches when monitoring features are disabled
     if [ "$IS_ROTOM" = "false" ] || [ "$AUTO_START" = "false" ]; then
         return
     fi
