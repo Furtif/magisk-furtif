@@ -1,8 +1,8 @@
-#!/system/bin/sh
+﻿#!/system/bin/sh
 # ============================================================================
 # MagiskFurtif Service Script
 # ============================================================================
-# This script runs as a Magisk late_start service and manages the FurtiF™ Tools
+# This script runs as a Magisk late_start service and manages the --=FurtiF™=-- Tools
 # application monitoring and automation system.
 #
 # Features:
@@ -93,38 +93,38 @@ sleep 5
 # Screen unlock automation (if needed)
 # Reference: https://stackoverflow.com/questions/29072501/how-to-unlock-android-phone-through-adb
 # Uncomment and modify as needed:
-# input keyevent 26                    # Press lock button
+# input keyevent 26                        # Press lock button
 # input touchscreen swipe 930 880 930 380  # Swipe up to unlock
-# input swipe 930 880 930 380           # Alternative swipe command
-# input text 1234                       # Enter passcode (replace with yours)
-# input keyevent 66                    # Press Enter
+# input swipe 930 880 930 380              # Alternative swipe command
+# input text 1234                          # Enter passcode (replace with yours)
+# input keyevent 66                        # Press Enter
 
 # ============================================================================
 # FUNCTION DEFINITIONS
 # ============================================================================
 
-# Get device name from FurtiF™ Tools configuration file
+# Get device name from --=FurtiF™=-- Tools configuration file
 # Reads the RotomDeviceName field from the main app configuration
 # Returns: Device name string for API communications and logging
 get_device_name() {
     su -c "cat /data/data/com.github.furtif.furtifformaps/files/config.json" | "$BINDIR"/jq -r ".RotomDeviceName"
 }
 
-# Get package name from FurtiF™ Tools configuration file
+# Get package name from --=FurtiF™=-- Tools configuration file
 # Reads the PackageName field from the main app configuration
 # Returns: Package name string for process monitoring
 get_package_name() {
     su -c "cat /data/data/com.github.furtif.furtifformaps/files/config.json" | "$BINDIR"/jq -r ".PackageName"
 }
 
-# Get Rotom mode status from FurtiF™ Tools configuration
+# Get Rotom mode status from --=FurtiF™=--Tools configuration
 # Checks if Rotom integration mode is enabled in the app settings
 # Returns: "true" if Rotom mode is enabled, "false" otherwise
 get_is_rotom_mode() {
     su -c "cat /data/data/com.github.furtif.furtifformaps/files/config.json" | "$BINDIR"/jq -r ".IsRotomMode"
 }
 
-# Get auto-start setting from FurtiF™ Tools configuration
+# Get auto-start setting from --=FurtiF™=--Tools configuration
 # Checks if automatic app restart is enabled in Rotom settings
 # Returns: "true" if auto-start is enabled, "false" otherwise
 get_try_auto_start() {
@@ -132,30 +132,30 @@ get_try_auto_start() {
 }
 
 # Device identification (AUTO-CONFIGURED)
-# Automatically retrieved from FurtiF™ Tools configuration file
+# Automatically retrieved from --=FurtiF™=-- Tools configuration file
 # - Actual value comes from get_device_name() function
-# - Reads 'RotomDeviceName' field from FurtiF™ Tools config.json
+# - Reads 'RotomDeviceName' field from --=FurtiF™=-- Tools config.json
 # - Used for logging, notifications, and API communications
 DEVICE_NAME=$(get_device_name)
 
 # Package name (AUTO-CONFIGURED)
-# Automatically retrieved from FurtiF™ Tools configuration file
+# Automatically retrieved from --=FurtiF™=-- Tools configuration file
 # - Actual value comes from get_package_name() function
-# - Reads 'PackageName' field from FurtiF™ Tools config.json
+# - Reads 'PackageName' field from --=FurtiF™=-- Tools config.json
 # - Used for process monitoring and lifecycle management
 PACKAGE_NAME=$(get_package_name)
 
 # Rotom mode status (AUTO-CONFIGURED)
-# Automatically retrieved from FurtiF™ Tools configuration file
+# Automatically retrieved from --=FurtiF™=-- Tools configuration file
 # - Actual value comes from get_is_rotom_mode() function
-# - Reads 'IsRotomMode' field from FurtiF™ Tools config.json
+# - Reads 'IsRotomMode' field from --=FurtiF™=-- Tools config.json
 # - Used to enable/disable Rotom API integration and monitoring features
 IS_ROTOM=$(get_is_rotom_mode)
 
 # Auto-start setting (AUTO-CONFIGURED)
-# Automatically retrieved from FurtiF™ Tools configuration file
+# Automatically retrieved from --=FurtiF™=-- Tools configuration file
 # - Actual value comes from get_try_auto_start() function
-# - Reads 'RotomTryAutoStart' field from FurtiF™ Tools config.json
+# - Reads 'RotomTryAutoStart' field from --=FurtiF™=-- Tools config.json
 # - Used to enable/disable automatic recovery and restart functionality
 AUTO_START=$(get_try_auto_start)
 
@@ -240,7 +240,7 @@ rotom_device_status() {
 # Returns: 0 on success, 1 on failure
 send_discord_message() {
     # Only send if Discord notifications are enabled
-    if [ "$USE_DISCORD" = true ]; then     
+    if [ "$USE_DISCORD" = true ]; then
         # Escape special characters for JSON compatibility
         # Convert newlines to \n and escape quotes for JSON payload
         message=$(echo "$1" | sed 's/"/\\"/g' | sed 's/$/\\n/' | tr -d '\n')
@@ -267,7 +267,7 @@ send_discord_message() {
         # Create optimized JSON payload with Discord embed formatting
         # Includes timestamp for better message tracking
         timestamp=$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)
-        payload="{\"content\": null, \"embeds\": [{\"title\": \"FurtiF Tools Monitor\", \"description\": \"$message\", \"color\": $selected_color, \"timestamp\": \"$timestamp\"}]}"
+        payload="{\"content\": null, \"embeds\": [{\"title\": \"--=FurtiF™=-- Tools Monitor\", \"description\": \"$message\", \"color\": $selected_color, \"timestamp\": \"$timestamp\"}]}"
         
         # Send webhook request to Discord API
         # Use curl to POST the JSON payload to the webhook URL
@@ -281,12 +281,12 @@ send_discord_message() {
 }
 
 # Check if target applications are running
-# Monitors FurtiF™ Tools and associated app process status
+# Monitors --=FurtiF™=-- Tools and associated app process status
 # Returns: 0 if both processes are running, 1 if either is missing
 check_device_status() {
     # Get process IDs for target applications
-    # PACKAGE_NAME: The main app (configured from FurtiF™ Tools settings)
-    # com.github.furtif.furtifformaps: The FurtiF™ Tools app itself
+    # PACKAGE_NAME: The main app (configured from --=FurtiF™=-- Tools settings)
+    # com.github.furtif.furtifformaps: The --=FurtiF™=--Tools app itself
     PidAPP=$(pidof "$PACKAGE_NAME")
     PidAPK=$(pidof com.github.furtif.furtifformaps)
     
@@ -298,7 +298,7 @@ check_device_status() {
     return 0
 }
 
-# Force-close applications and restart FurtiF™ Tools
+# Force-close applications and restart --=FurtiF™=-- Tools
 # Executes recovery procedure when device is detected as offline
 # This function ensures clean shutdown and restart of the application stack
 # Parameters: None (uses global configuration variables)
@@ -318,11 +318,11 @@ close_apps_if_offline_and_start_it() {
     # Wait before restarting to ensure clean shutdown and resource cleanup
     sleep 5
     
-    # Restart the FurtiF™ Tools application
+    # Restart the --=FurtiF™=-- Tools application
     start_apk_tools
 }
 
-# Start FurtiF™ Tools application
+# Start --=FurtiF™=-- Tools application
 # Launches the main application and waits for initialization
 # This function initiates the app startup sequence and allows time for full initialization
 # Parameters: None (uses global configuration variables)
@@ -333,13 +333,13 @@ start_apk_tools() {
     if [ "$IS_ROTOM" = "false" ] || [ "$AUTO_START" = "false" ]; then
         return
     fi
-    # Launch FurtiF™ Tools main activity using Android Activity Manager
+    # Launch --=FurtiF™=-- Tools main activity using Android Activity Manager
     # This starts the main application interface
     am start -n com.github.furtif.furtifformaps/com.github.furtif.furtifformaps.MainActivity
     
     # Send confirmation that tools have been started
     message="✅ **Device Started: $DEVICE_NAME**\n\n"
-    message="${message}🚀 **Application:** FurtiF™ Tools launched\n"
+    message="${message}🚀 **Application:** --=FurtiF™=-- Tools launched\n"
     message="${message}⏱️ **Wait:** $LOADER_TIME seconds for initialization\n"
     message="${message}✨ **Status:** Ready for operation"
     send_discord_message "$message"
@@ -359,14 +359,14 @@ sleep 15
 
 # Continuous monitoring loop
 # This is the main operational loop that runs continuously:
-# 1. Refreshes configuration from FurtiF™ Tools settings
+# 1. Refreshes configuration from --=FurtiF™=-- Tools settings
 # 2. Validates that Rotom mode and auto-start are enabled
 # 3. Checks application process status
 # 4. Triggers recovery if apps are not running
 # 5. Performs Rotom API status checks (if enabled)
 # 6. Waits 5 minutes between iterations
 while true; do
-    # Refresh configuration from FurtiF™ Tools settings
+    # Refresh configuration from --=FurtiF™=-- Tools settings
     # This allows for dynamic configuration changes without service restart
     DEVICE_NAME=$(get_device_name)
     PACKAGE_NAME=$(get_package_name)

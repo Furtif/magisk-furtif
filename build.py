@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 MagiskFurtif Build Script
 ========================
@@ -86,8 +86,8 @@ def create_module_prop(path, release_version):
 name=MagiskFurtif
 version=v{release_version}
 versionCode={release_version.replace('.', '')}
-author=Furtif
-description=Runs FurtiF Tools on boot with magisk.
+author=--=FurtiF™=--
+description=Runs --=FurtiF™=-- Tools on boot with magisk.
 support=https://github.com/Furtif/magisk-furtif/issues
 minMagisk=1530"""
 
@@ -212,8 +212,8 @@ Examples:
 
     parser.add_argument(
         "-v", "--version",
-        default="2.76",
-        help="Module version (default: 2.76)"
+        default="3.01",
+        help="Module version (default: 3.01)"
     )
 
     return parser.parse_args()
