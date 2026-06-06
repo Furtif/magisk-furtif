@@ -86,8 +86,8 @@ def create_module_prop(path, release_version):
 name=MagiskFurtif
 version=v{release_version}
 versionCode={release_version.replace('.', '')}
-author=--=FurtiF™=--
-description=Runs --=FurtiF™=-- Tools on boot with magisk.
+author=--=FurtiF(tm)=--
+description=Runs --=FurtiF(tm)=-- Tools on boot with magisk.
 support=https://github.com/Furtif/magisk-furtif/issues
 minMagisk=1530"""
 
